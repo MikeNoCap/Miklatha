@@ -1,1 +1,1 @@
-cmd /c start /min "" powershell -WindowStyle hidden "C:/Sys69/startup.ps1"
+powershell "C:/Sys69/startup.ps1"

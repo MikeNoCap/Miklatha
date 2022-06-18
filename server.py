@@ -25,7 +25,6 @@ onlines = {}
 
 
 def client_handler(connection):
-    print("connection")
     con = sqlite3.connect('mikshells.db')
     cur = con.cursor()
 

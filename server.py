@@ -107,7 +107,12 @@ def shell():
     while shell_command != "mikshell-exit":
         onlines[user]['connection'].send(shell_command.encode("utf-8"))
         data = onlines[user]['connection'].recv(2048*8).decode("utf-8")
-        json_data = json.loads(data)
+        try:
+            json_data = json.loads(data)
+        except Exception as e:
+            print(e)
+            print(data)
+            break
 
         print(f"{Fore.RED if json_data['status'] == 'ERR' else ''}{json_data['out']}{Style.RESET_ALL if json_data['status'] == 'ERR' else ''}") if data != 0x1 else ""
         path = json_data['path'].replace("\n", "").replace("\r", "")

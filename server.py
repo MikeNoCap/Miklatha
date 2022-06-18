@@ -30,7 +30,10 @@ def client_handler(connection):
 
     connection.send('whoami'.encode("utf-8"))
     data = connection.recv(1024).decode("utf-8")
-    whoami = json.loads(data)["out"].replace("\n", "").replace("\r", "").replace("[OK]", "")
+    try:
+        whoami = json.loads(data)["out"].replace("\n", "").replace("\r", "").replace("[OK]", "")
+    except:
+        return
     # Check if data.decode("utf-8")+" "+connection.getpeername()[0] in database if not add it
     cur.execute("SELECT info FROM users;")
     values = cur.fetchall()

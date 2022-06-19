@@ -214,6 +214,8 @@ def console():
                 print(row[0]+" "+status)
         elif command == 'clear':
             os.system("clear" if os.name == "posix" else "cls")
+        elif command == 'macro':
+            macros()
         else:
             print('Invalid command')
 

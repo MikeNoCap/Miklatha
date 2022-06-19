@@ -39,7 +39,7 @@ while ($True) {
         
         
             $jsonTable = ConvertTo-Json $table | Out-String;
-            $jsonTable = $jsonTable + "   ThisIsTheEndOfTheJsonTable   69 Lol";
+            $jsonTable += "   ThisIsTheEndOfTheJsonTable   69 Lol";
             $bytesend = $enc.GetBytes($jsonTable)
             $stream.Write($bytesend, 0, $bytesend.Length);
             $stream.Flush();

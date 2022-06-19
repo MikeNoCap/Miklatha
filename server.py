@@ -42,7 +42,15 @@ def client_handler(connection):
     cur = con.cursor()
 
     connection.send('whoami'.encode("utf-8"))
-    data = connection.recv(1024).decode("utf-8")
+    data = ""
+    while True:
+        indata = connection.recv(1024).decode("utf-8")
+        if indata.endswith("   ThisIsTheEndOfTheJsonTable   69 Lol"):
+            data += indata[:-38]
+            break
+        data += indata
+        print(indata)
+
     try:
         whoami = json.loads(data)["out"].replace("\n", "").replace("\r", "").replace("[OK]", "")
     except:
@@ -164,6 +172,7 @@ def shell():
             data = ""
             while True:
                 in_data = onlines[user]['connection'].recv(2048*4).decode("utf-8")
+                print(in_data)
                 if in_data.endswith("   ThisIsTheEndOfTheJsonTable   69 Lol"):
                     data += in_data[:-38]
                     break

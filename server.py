@@ -167,6 +167,7 @@ def shell():
             onlines.pop(user)
             break
         try:
+            print(data)
             json_data = json.loads(data)
         except Exception as e:
             print(e)

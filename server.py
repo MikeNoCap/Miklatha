@@ -161,7 +161,7 @@ def shell():
     while shell_command != "mikshell-exit":
         try:
             onlines[user]['connection'].send(shell_command.encode("utf-8"))
-            data = onlines[user]['connection'].recv(2048*64).decode("utf-8")
+            data = onlines[user]['connection'].recv(2048*128).decode("utf-8")
         except ConnectionResetError:
             print("Connection lost")
             onlines.pop(user)

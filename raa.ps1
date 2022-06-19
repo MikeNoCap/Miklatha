@@ -9,6 +9,7 @@ while ($True) {
             break
         }
         catch {
+            Write-Warning $Error[0]
             continue
         }
         

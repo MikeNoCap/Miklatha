@@ -27,6 +27,7 @@ onlines = {}
 def client_handler(connection):
     con = sqlite3.connect('mikshells.db')
     cur = con.cursor()
+    print(connection)
 
     connection.send('whoami'.encode("utf-8"))
     data = connection.recv(1024).decode("utf-8")

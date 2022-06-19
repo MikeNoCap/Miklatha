@@ -94,7 +94,7 @@ def start_server(host, port):
         accept_connections(ServerSocket)
 
 
-def macros():
+def macro():
     cur.execute("SELECT info FROM users;")
     avalible = []
     for row in cur.fetchall():
@@ -215,7 +215,7 @@ def console():
         elif command == 'clear':
             os.system("clear" if os.name == "posix" else "cls")
         elif command == 'macro':
-            macros()
+            macro()
         else:
             print('Invalid command')
 

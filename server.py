@@ -112,19 +112,20 @@ def macro():
     except:
         print("Invalid input")
         return
-    for num, macro in enumerate(macros.keys()):
-        print(f"{Fore.GREEN}{num+1}.{Style.RESET_ALL} {macro}")
+    for num, macrotype in enumerate(macros.keys()):
+        print(f"{Fore.GREEN}{num+1}.{Style.RESET_ALL} {macrotype}")
     print("Enter the number of the macro you want to send:")
     try:
-        macro = macros.keys()[int(input())-1]
-    except:
+        macrotype = macros.keys()[int(input())-1]
+    except Exception as e:
+        print(e)
         print("Invalid input")
         return
     args = []
-    for arg in macros[macro]["args"]:
+    for arg in macros[macrotype]["args"]:
         print(f"Enter the {arg} argument:")
         args.append(input())
-    steps = macros[macro]["steps"]
+    steps = macros[macrotype]["steps"]
     for step in steps:
         try:
             onlines[user]["connection"].send(step.encode("utf-8"))

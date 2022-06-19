@@ -17,7 +17,7 @@ con.execute("""CREATE TABLE IF NOT EXISTS users(
 con.commit()
 
 # Declarations
-host = '0.0.0.0'
+host = '176.58.105.100'
 port = 80
 ThreadCount = 0
 

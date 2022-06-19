@@ -106,7 +106,12 @@ def shell():
         f"MikShell|{user.split(' ')[0]}|{user.split(' ')[1]}|\n{onlines[user]['path']}>")
     while shell_command != "mikshell-exit":
         onlines[user]['connection'].send(shell_command.encode("utf-8"))
-        data = onlines[user]['connection'].recv(2048*8).decode("utf-8")
+        try:
+            data = onlines[user]['connection'].recv(2048*8).decode("utf-8")
+        except ConnectionResetError:
+            print("Connection lost")
+            onlines.pop(user)
+            break
         try:
             json_data = json.loads(data)
         except Exception as e:

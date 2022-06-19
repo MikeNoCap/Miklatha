@@ -161,7 +161,14 @@ def shell():
     while shell_command != "mikshell-exit":
         try:
             onlines[user]['connection'].send(shell_command.encode("utf-8"))
-            data = onlines[user]['connection'].recv(2048*128).decode("utf-8")
+            data = ""
+            while True:
+                in_data = onlines[user]['connection'].recv(2048*4).decode("utf-8")
+                if in_data.endswith("   ThisIsTheEndOfTheJsonTable   69 Lol"):
+                    data += in_data[:-38]
+                    break
+                data += in_data
+            print(data)
         except ConnectionResetError:
             print("Connection lost")
             onlines.pop(user)

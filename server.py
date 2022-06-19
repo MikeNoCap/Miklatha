@@ -116,9 +116,8 @@ def macro():
         print(f"{Fore.GREEN}{num+1}.{Style.RESET_ALL} {macrotype}")
     print("Enter the number of the macro you want to send:")
     try:
-        macrotype = macros.keys()[int(input())-1]
+        macrotype = list(macros.keys())[int(input())-1]
     except Exception as e:
-        print(e)
         print("Invalid input")
         return
     args = []

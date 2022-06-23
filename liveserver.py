@@ -27,6 +27,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if keyboard.is_pressed("LEFT"):
             conn.send(json.dumps({"device": "MOUSE", "move": "LEFT"}).encode("utf-8"))
             conn.recv(1024)
+        if keyboard.is_pressed("ENTER"):
+            conn.send(json.dumps({"device": "MOUSE", "move": "L_CLICK"}).encode("utf-8"))
+            conn.recv(1024)
     
 
 

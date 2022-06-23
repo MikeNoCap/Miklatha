@@ -1,30 +1,59 @@
-$Path = "C:\ScreenCapture"
-# Make sure that the directory to keep screenshots has been created, otherwise create it
-If (!(test-path $path)) {
-    New-Item -ItemType Directory -Force -Path $path
-}
+$daip = "localhost";
+$daport = 87;
+$enc = [Text.Encoding]::UTF8
 Add-Type -AssemblyName System.Windows.Forms
-$screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-# Get the current screen resolution
-$image = New-Object System.Drawing.Bitmap($screen.Width, $screen.Height)
-# Create a graphic object
-$graphic = [System.Drawing.Graphics]::FromImage($image)
-$point = New-Object System.Drawing.Point(0, 0)
-$graphic.CopyFromScreen($point, $point, $image.Size);
-$cursorBounds = New-Object System.Drawing.Rectangle([System.Windows.Forms.Cursor]::Position, [System.Windows.Forms.Cursor]::Current.Size)
-# Get a screenshot
-[System.Windows.Forms.Cursors]::Default.Draw($graphic, $cursorBounds)
 
-$rect = New-Object System.Drawing.Rectangle(0, 0, $screen.Width, $screen.Height)
-
-
-
-# Iterate through all bytes in image
-$data = $image.LockBits($rect, 1, $image.PixelFormat) 
-$bmpWidth = $data.Stride
-$bytes = $bmpWidth * $data.Height
-$rgb = New-Object Byte[] $bytes
-$ptr = $data.Scan0
-
-# echo all bytes
-echo $rgb
+while ($True) {
+    while ($True) {
+        try {
+            $client = New-Object System.Net.Sockets.TCPClient($daip, $daport);
+            break
+        }
+        catch {
+            Write-Warning $Error[0]
+            continue
+        }
+        
+    }
+    
+    $stream = $client.GetStream(); [byte[]]$bytes = 0..65535 | ForEach-Object { 0 };
+    
+    try {
+        while (($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0) {
+            $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes, 0, $i);
+            $json_data = $data | ConvertFrom-Json;
+            $move = 1;
+            if ($json_data.device -eq "MOUSE") {
+                if ($json_data.move -eq "UP") {
+                    $POSITION = [Windows.Forms.Cursor]::Position;
+                    $POSITION.y -= $move;
+                    [Windows.Forms.Cursor]::Position = $POSITION;
+                }
+                if ($json_data.move -eq "RIGHT") {
+                    $POSITION = [Windows.Forms.Cursor]::Position;
+                    $POSITION.x += $move;
+                    [Windows.Forms.Cursor]::Position = $POSITION;
+                }
+                if ($json_data.move -eq "DOWN") {
+                    $POSITION = [Windows.Forms.Cursor]::Position;
+                    $POSITION.y += $move;
+                    [Windows.Forms.Cursor]::Position = $POSITION;
+                }
+                if ($json_data.move -eq "LEFT") {
+                    $POSITION = [Windows.Forms.Cursor]::Position;
+                    $POSITION.x -= $move;
+                    [Windows.Forms.Cursor]::Position = $POSITION;
+                }
+            }
+            $bytesend = $enc.GetBytes("OK");
+            $stream.Write($bytesend, 0, $bytesend.Length);
+            $stream.Flush();
+        
+        };
+    }
+    catch {
+        continue;
+    }
+    $client.Close();
+        
+}

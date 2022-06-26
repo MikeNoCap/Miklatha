@@ -20,13 +20,15 @@ while ($True) {
         
     }
     
-    $stream = $client.GetStream(); [byte[]]$bytes = 0..65535 | ForEach-Object { 0 };
+    $stream = $client.GetStream(); 
+    [byte[]]$bytes = 0..65535 | ForEach-Object { 0 };
     
     try {
         while (($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0) {
             $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes, 0, $i);
             $json_data = $data | ConvertFrom-Json;
-            $move = 10;
+            $move = 1
+            0;
             if ($json_data.device -eq "MOUSE") {
                 if ($json_data.move -eq "UP") {
                     $POSITION = [Windows.Forms.Cursor]::Position;

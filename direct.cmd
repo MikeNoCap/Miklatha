@@ -1,1 +1,0 @@
-powerShell -windowstyle hidden C:/IFound/mogus.ps1

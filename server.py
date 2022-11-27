@@ -184,7 +184,7 @@ def shell():
         onlines[user]['path'] = path
         shell_command = input(
             f"MikShell|{user.split(' ')[0]}|{user.split(' ')[1]}|\n{path}>")
-        if shell_command = "exit":
+        if shell_command == "exit":
             shell_command = "mikshell-exit"
 
 
